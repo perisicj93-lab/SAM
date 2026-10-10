@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GreenTravel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#F6F1E7;--card:#FFFDF8;--ink:#14251D;--mut:#6B7A70;--line:#E3D8C0;--pine:#0F2E24;--on-pine:#E8F4EC;--sun:#A8823F;--leaf:#2A7A55;--navbg:rgba(255,253,248,.82);--glow:rgba(184,146,74,.16);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08150F;--card:rgba(255,255,255,.045);--ink:#E8F4EC;--mut:#9DB0A5;--line:rgba(212,180,115,.24);--sun:#D4B473;--leaf:#7FD1A6;--navbg:rgba(14,32,25,.8);--glow:rgba(212,180,115,.14)}}
+:root[data-theme="dark"]{--bg:#08150F;--card:rgba(255,255,255,.045);--ink:#E8F4EC;--mut:#9DB0A5;--line:rgba(212,180,115,.24);--sun:#D4B473;--leaf:#7FD1A6;--navbg:rgba(14,32,25,.8);--glow:rgba(212,180,115,.14)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(800px 380px at 50% -140px,var(--glow),transparent) var(--bg);color:var(--ink);font:400 15px/1.55 Figtree,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;margin:0;line-height:1.1;font-weight:600}
+.app{max-width:460px;margin:0 auto;min-height:100vh;padding:0 18px 120px}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 0 14px}
+header h1{font-size:26px;font-weight:700;letter-spacing:.01em}
+header small{display:block;color:var(--mut);font-size:12.5px;letter-spacing:.06em}
+button{font:inherit;cursor:pointer;border:0}
+button:focus-visible,a:focus-visible{outline:2px solid var(--sun);outline-offset:3px}
+.qrbtn{background:transparent;color:var(--sun);border:1px solid var(--sun);border-radius:99px;padding:8px 16px;font-weight:600;font-size:13px}
+.passport{color:#E8F4EC;border-radius:24px;padding:26px 24px;position:relative;overflow:hidden;border:1px solid rgba(168,235,203,.45);
+background:repeating-radial-gradient(circle at 85% 0,rgba(168,235,203,.07) 0 1px,transparent 1px 9px),linear-gradient(150deg,#14402F,#0A1F18 70%);box-shadow:0 24px 50px -22px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08)}
+.passport:after{content:"";position:absolute;right:-46px;top:-46px;width:170px;height:170px;border:1px solid rgba(168,235,203,.4);border-radius:50%;box-shadow:0 0 0 12px rgba(168,235,203,.06)}
+.pid{font-size:11.5px;color:#A8EBCB;letter-spacing:.14em}
+.pname{font:700 32px 'Cormorant Garamond',Georgia,serif;margin:6px 0 16px}
+.pts{display:flex;align-items:baseline;gap:8px}
+.pts b{font:600 62px/1 'Cormorant Garamond',Georgia,serif;color:#A8EBCB}
+.pts span{opacity:.75}
+.lvl{display:inline-block;border:1px solid rgba(168,235,203,.55);color:#A8EBCB;border-radius:99px;padding:3px 14px;font-weight:500;font-size:12.5px;letter-spacing:.05em;margin-bottom:14px}
+.bar{height:3px;background:rgba(255,255,255,.16);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#34A67A,#A8EBCB);border-radius:9px;transition:width .6s}
+.next{font-size:13px;opacity:.8;margin-top:9px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:16px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 12px;backdrop-filter:blur(8px)}
+.stat b{display:block;font:600 28px/1.1 'Cormorant Garamond',Georgia,serif;color:var(--sun)}
+.stat span{font-size:12px;color:var(--mut)}
+h2{font-size:25px;margin:30px 0 12px;letter-spacing:.01em}
+.stamps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stamp{aspect-ratio:1;border-radius:50%;border:1px dashed var(--line);display:grid;place-items:center;font-size:10.5px;line-height:1.2;text-align:center;color:var(--mut);padding:4px}
+.stamp.on{border:3px double var(--sun);color:var(--sun);font-weight:600;transform:rotate(-8deg);background:color-mix(in srgb,var(--sun) 10%,transparent)}
+.stamp.on:nth-child(even){transform:rotate(7deg)}
+.stamp em{font-style:normal;font-size:20px;display:block;line-height:1.1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:12px;backdrop-filter:blur(8px)}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.tag{font-size:12.5px;color:var(--mut)}
+.card h3{font-size:22px;margin:4px 0 6px}
+.card p{margin:0;color:var(--mut);font-size:14px}
+.eco{display:inline-block;font-weight:600;font-size:12.5px;color:var(--leaf);margin-top:10px}
+.pill{border:1px solid var(--sun);color:var(--sun);border-radius:99px;padding:2px 12px;font-weight:600;font-size:13px;white-space:nowrap}
+.btn{margin-top:14px;width:100%;background:var(--btng);color:var(--on-sun);border-radius:14px;padding:12px;font-weight:600;letter-spacing:.02em}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.filters{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+.chip{background:transparent;border:1px solid var(--line);border-radius:99px;padding:7px 16px;color:var(--ink);white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--sun);color:var(--on-sun);border-color:var(--sun);font-weight:600}
+nav{position:fixed;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:0 14px;pointer-events:none}
+nav div{pointer-events:auto;max-width:440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);background:var(--navbg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:28px;padding:4px;box-shadow:0 14px 34px -14px rgba(0,0,0,.5)}
+nav button{background:none;color:var(--mut);padding:9px 4px;font-size:11.5px;font-weight:500;border-radius:22px}
+nav button span{display:block;font-size:19px}
+nav button[aria-selected="true"]{color:var(--sun);background:color-mix(in srgb,var(--sun) 12%,transparent)}
+.view{display:none}.view.on{display:block}
+.meter{height:3px;background:var(--line);border-radius:9px;margin:10px 0 6px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--leaf)}
+.badge{font-size:11px;font-weight:600;border-radius:99px;padding:3px 10px;letter-spacing:.04em}
+.b-gold{background:var(--btng);color:var(--on-sun)}.b-silver{background:#C9D3CE;color:#22302a}.b-new{border:1px solid var(--line);color:var(--mut)}
+.note{font-size:12.5px;color:var(--mut);margin-top:18px}
+#toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:#E8F4EC;color:#14251D;padding:11px 18px;border-radius:99px;opacity:0;transition:.25s;pointer-events:none;max-width:90%;text-align:center;font-weight:600;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+#toast.show{opacity:1;transform:translateX(-50%)}
+dialog{border:1px solid var(--line);border-radius:26px;padding:26px;max-width:340px;width:90%;background:var(--bg);color:var(--ink);text-align:center}
+dialog::backdrop{background:rgba(3,10,7,.7);backdrop-filter:blur(4px)}
+#qr{display:grid;place-items:center;background:#fff;border-radius:16px;padding:14px;margin:16px auto;width:max-content;min-height:100px}
+#url{word-break:break-all;font-size:12px;color:var(--mut)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+:root{--bad:#B83A1E;--mid:#8A6A25}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bad:#F08F6E;--mid:#D4B473}}
+:root[data-theme="dark"]{--bad:#F08F6E;--mid:#D4B473}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:10px;color:var(--ink);backdrop-filter:blur(8px)}
+.opt[aria-pressed="true"]{border-color:var(--sun);box-shadow:0 0 0 1px var(--sun);background:color-mix(in srgb,var(--sun) 9%,var(--card))}
+.opt .top{display:flex;justify-content:space-between;gap:12px;font-weight:600}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12.5px;color:var(--mut)}
+.lv{font-weight:600}.lv2{color:var(--leaf)}.lv1{color:var(--mid)}.lv0{color:var(--bad)}
+.nudge{border:1px solid var(--leaf);background:color-mix(in srgb,var(--leaf) 10%,transparent);border-radius:18px;padding:14px;margin:-2px 0 12px}
+.nudge b{font:600 19px 'Cormorant Garamond',Georgia,serif}
+.nudge p{margin:4px 0 0;color:var(--mut);font-size:13.5px}
+.nudge .btn{margin-top:10px;padding:9px}
+.ln{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ln.t{font-weight:700;font-size:16px;border:0}
+.warn{color:var(--bad);font-size:13px;margin:8px 0 0}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:12px;font-size:13.5px}
+.chk input{margin-top:3px;accent-color:var(--sun);width:18px;height:18px}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:99px;padding:3px;margin-bottom:4px}
+.seg button{background:none;border-radius:99px;padding:8px;color:var(--mut);font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--sun);color:var(--on-sun)}
+h3.sub{font-size:21px;margin:22px 0 10px}
+label.chk.card{padding:14px;margin-bottom:8px;cursor:pointer}
+.stp{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+.stp i{font:600 24px/1 'Cormorant Garamond',Georgia,serif;color:var(--sun);font-style:normal;min-width:20px}
+.lab{display:block;margin-top:12px;font-size:13px;color:var(--mut)}
+.in{display:block;width:100%;margin-top:6px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:11px 12px;color:var(--ink);font:inherit}
+.in:focus-visible{outline:2px solid var(--sun);outline-offset:1px}
+ul.pl{margin:0;padding-left:18px;color:var(--mut);font-size:14px}ul.pl li{margin:4px 0}
+body.out .app,body.out nav{display:none}
+body:not(.out) #auth{display:none}
+.auth{max-width:420px;margin:0 auto;min-height:100vh;padding:48px 20px 40px}
+.auth h1{font:700 36px/1.1 'Cormorant Garamond',Georgia,serif;margin:16px 0 4px}
+.mark{width:56px;height:56px;border-radius:50%;border:1px solid var(--sun);display:grid;place-items:center;font-size:26px;background:color-mix(in srgb,var(--sun) 10%,transparent)}
+.auth .seg{margin:22px 0 12px}
+.seg[hidden]{display:none}
+.or{text-align:center;color:var(--mut);font-size:13px;margin:18px 0 2px}
+.err{color:var(--bad);font-size:13px;margin:10px 0 0;min-height:1.2em}
+.pw{position:relative;display:block}
+.pw .in{padding-right:84px}
+.pw button{position:absolute;right:6px;top:12px;background:none;color:var(--sun);font-size:13px;font-weight:600;padding:4px 10px}
+.rolechips{display:flex;gap:8px;margin-top:6px}.rolechips .chip{flex:1}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.two .btn{margin-top:0}
+.hr{display:flex;gap:6px}.hr .qrbtn{padding:7px 12px}
+header h1{font-size:23px}
+:root{--bg:#F1F6F2;--card:#fff;--ink:#0F2A20;--mut:#5A7064;--line:#D3E2D9;--sun:#1F7A5A;--leaf:#1F7A5A;--on-sun:#fff;--btng:linear-gradient(135deg,#2A9068,#145C41);--navbg:rgba(255,255,255,.86);--glow:rgba(31,122,90,.16);--mid:#667A2B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#07140F;--card:rgba(255,255,255,.05);--ink:#E8F4EC;--mut:#93B0A1;--line:rgba(127,224,176,.22);--sun:#7FE0B0;--leaf:#7FE0B0;--on-sun:#062015;--btng:linear-gradient(135deg,#9BEBC6,#4FC993);--navbg:rgba(10,30,22,.82);--glow:rgba(127,224,176,.13);--mid:#C5D98A}}
+:root[data-theme="dark"]{--bg:#07140F;--card:rgba(255,255,255,.05);--ink:#E8F4EC;--mut:#93B0A1;--line:rgba(127,224,176,.22);--sun:#7FE0B0;--leaf:#7FE0B0;--on-sun:#062015;--btng:linear-gradient(135deg,#9BEBC6,#4FC993);--navbg:rgba(10,30,22,.82);--glow:rgba(127,224,176,.13);--mid:#C5D98A}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.bdg{border:1px solid var(--line);border-radius:16px;padding:12px 6px;text-align:center;font-size:12px;color:var(--mut);background:var(--card)}
+.bdg em{display:block;font-style:normal;font-size:24px}
+.bdg.on{border-color:var(--sun);color:var(--ink)}
+.bdg:not(.on){opacity:.5;filter:grayscale(1)}
+.score{display:flex;align-items:center;gap:16px}
+.ring{width:92px;height:92px;border-radius:50%;background:conic-gradient(var(--sun) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center;flex:none}
+.ring b{width:70px;height:70px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font:600 30px 'Cormorant Garamond',Georgia,serif}
+.dim{display:grid;grid-template-columns:104px 1fr 26px;gap:8px;align-items:center;font-size:12.5px;margin-top:6px;color:var(--mut)}
+.dim .meter{margin:0}
+.pre{border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:10px;background:var(--card)}
+.pre .btn{margin-top:10px;padding:9px}
+.card.sel{border-color:var(--sun);box-shadow:0 0 0 1px var(--sun)}
+</style>
+</head>
+<body class="out">
+<section id="auth" class="auth" aria-label="Prijava">
+  <div class="mark" aria-hidden="true">🌿</div>
+  <h1>GreenTravel</h1>
+  <p class="tag">Putuj bolje. Vidi uticaj. Osvoji nagradu.</p>
+  <div class="seg" role="group" aria-label="Prijava ili registracija"><button data-am="in" aria-pressed="true">Prijava</button><button data-am="up" aria-pressed="false">Registracija</button></div>
+  <div class="card" id="authform"></div>
+  <p class="tag">Prototip: nalozi se ne čuvaju i nema pravog servera.</p>
+  <div class="or">ili nastavi sa</div>
+  <div class="two"><button class="btn ghost" data-social="Google">Google</button><button class="btn ghost" data-social="Apple">Apple</button></div>
+  <h3 class="sub">Demo pristup za prezentaciju</h3>
+  <div class="two"><button class="btn" data-demo="putnik">Putnik</button><button class="btn" data-demo="partner">Partner</button></div>
+</section>
+<div class="app">
+<header>
+  <div><h1>GreenTravel</h1><small>Putuj bolje. Vidi uticaj. Osvoji nagradu.</small></div>
+  <div class="hr"><button class="qrbtn" id="openQr">QR kod</button><button class="qrbtn" id="logout">Odjava</button></div>
+</header>
+<div class="seg" id="modeseg" role="group" aria-label="Način prikaza"><button data-m="putnik" aria-pressed="true">Putnik</button><button data-m="partner" aria-pressed="false">Partner</button></div>
+
+<main>
+<section class="view on" id="v-pasos">
+  <div class="passport">
+    <div class="pid">DIGITALNI PASOŠ · GT-2026-0417</div>
+    <div class="pname">Marko Petrović</div>
+    <span class="lvl" id="lvl"></span>
+    <div class="pts"><b id="pts"></b><span>poena</span></div>
+    <div class="bar" style="margin-top:10px"><i id="prog"></i></div>
+    <div class="next" id="next"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b id="co2"></b><span>kg CO₂ uštedeno</span></div>
+    <div class="stat"><b id="loc"></b><span>RSD ostalo lokalno</span></div>
+    <div class="stat"><b id="trips"></b><span>pečata</span></div>
+  </div>
+  <h2>Pečati</h2><div class="stamps" id="stamps"></div>
+  <h2>Značke</h2><div class="badges" id="badges"></div>
+  <h2>Izazovi</h2><div id="chal"></div>
+  <h2>Moja putovanja</h2><div id="mytrips"></div>
+</section>
+<section class="view" id="v-istrazi">
+  <h2 style="margin-top:12px">Isplaniraj putovanje</h2>
+  <p class="tag">Cena, kvalitet i uticaj na jednom mestu. Izbor je uvek tvoj, a bolji izbor se nagrađuje.</p>
+  <div class="filters" id="dests" role="group" aria-label="Destinacije" style="margin-top:10px"></div>
+  <div id="book"></div>
+</section>
+<section class="view" id="v-nagrade">
+  <h2 style="margin-top:12px">Zero Rewards</h2>
+  <p class="tag">Imaš <b id="pts2"></b> poena. 1 poen vredi 10 RSD.</p>
+  <div id="rewards" style="margin-top:10px"></div>
+</section>
+<section class="view" id="v-ppregled">
+  <h2 style="margin-top:12px">Partnerski portal</h2>
+  <div id="pprof"></div>
+  <div class="stats">
+    <div class="stat"><b>128</b><span>rezervacija</span></div>
+    <div class="stat"><b>78%</b><span>potrošnje lokalno</span></div>
+    <div class="stat"><b>9.840</b><span>podeljenih poena</span></div>
+  </div>
+  <h2>Mreža partnera</h2>
+  <div id="partners"></div>
+</section>
+<section class="view" id="v-pkrit">
+  <h2 style="margin-top:12px">Uslovi za partnere</h2>
+  <p class="tag">Označi šta već ispunjavaš i vidi kako bi ti ponuda bila označena. Svaka zelena tvrdnja mora imati dokaz.</p>
+  <h3 class="sub">Obavezni uslovi</h3><div id="req"></div>
+  <h3 class="sub">Bodovni kriterijumi (do 100)</h3><div id="scr"></div>
+  <div class="card" id="critres" aria-live="polite"></div>
+</section>
+<section class="view" id="v-pclan">
+  <h2 style="margin-top:12px">Kako postati član</h2>
+  <div id="steps"></div>
+  <h3 class="sub">Paketi članstva</h3>
+  <div id="pk"></div>
+  <p class="tag">Pored pretplate: provizija 7% od vrednosti rezervacije, uz dodatnih 3% za klijente iznad 50 rezervacija mesečno. Način obračuna precizira se ugovorom.</p>
+  <div id="apply" style="margin-top:14px"></div>
+</section>
+<section class="view" id="v-prez">
+  <h2 style="margin-top:12px">Rezervacije gostiju</h2>
+  <div class="filters" id="rf" role="group" aria-label="Status rezervacija"></div>
+  <div id="rlist" style="margin-top:10px"></div>
+</section>
+</main>
+</div>
+
+<nav><div role="tablist" aria-label="Glavna navigacija" id="tabs"></div></nav>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<dialog id="qrDlg">
+  <h2>Skeniraj i isprobaj</h2>
+  <p class="tag" style="margin:6px 0 0">Otvara ovaj prototip na telefonu.</p>
+  <div id="qr"></div>
+  <div id="url"></div>
+  <a class="btn" id="dl" download="greentravel-qr.png" style="display:block;text-align:center;text-decoration:none">Preuzmi QR (PNG)</a>
+  <button class="btn ghost" id="copy">Kopiraj link</button>
+  <button class="btn ghost" id="closeQr">Zatvori</button>
+</dialog>
+
+<script>
+var $=function(s){return document.querySelector(s)};
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function nf(n){return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+function fmt(n){return nf(n)+' RSD'}
+var state={pts:0,co2:0,stamps:[],trips:[],dest:'tara',sel:{},comp:false,beh:[],claimed:{},rez:[],rf:'-1',app:null,pkg:'Silver',base:0,am:'in',role:'putnik',user:null,mode:'putnik'};
+var LEVELS=[[0,'Putnik'],[300,'Istraživač'],[800,'Čuvar prirode'],[1500,'Ambasador']];
+var STAMPNAMES={tara:['🌲','Tara'],zlatibor:['⛰️','Zlatibor'],zit:['⭐','Zero Impact']};
+var LV={2:['Održivo','lv2'],1:['Umereno','lv1'],0:['Veći uticaj','lv0']};
+var VL={c:'Sertifikovano',v:'Verifikovano',s:'Samodeklarisano'};
+var DEST={
+ tara:{n:'Tara',from:'iz Beograda · 2 noći · 2 osobe',opts:[
+  {id:'t1',c:'Prevoz',i:'🚐',n:'Električni shuttle sa lokalnim vozačem',p:4200,k:6,e:2,l:70,v:'v'},
+  {id:'t2',c:'Prevoz',i:'🚌',n:'Autobus Beograd–Bajina Bašta',p:3400,k:18,e:1,l:25,v:'s'},
+  {id:'t3',c:'Prevoz',i:'🚗',n:'Sopstveni automobil',p:7000,k:80,e:0,l:5},
+  {id:'t4',c:'Smeštaj',i:'🏡',n:'Etno-kuća na solarnu energiju',p:10500,k:8,e:2,l:90,v:'v'},
+  {id:'t5',c:'Smeštaj',i:'🏨',n:'Eko-hotel sa Green Key oznakom',p:16500,k:20,e:2,l:55,v:'c'},
+  {id:'t6',c:'Smeštaj',i:'🏝️',n:'Veliki hotel sa bazenom',p:21000,k:96,e:0,l:20},
+  {id:'t7',c:'Aktivnosti',i:'🥾',n:'Pešačka tura sa lokalnim vodičem',p:2400,k:0,e:2,l:95,v:'v'},
+  {id:'t8',c:'Aktivnosti',i:'🚣',n:'Rafting sa lokalnim vodičem',p:5400,k:3,e:2,l:90,v:'v'},
+  {id:'t9',c:'Aktivnosti',i:'🍲',n:'Večera kod lokalnog domaćina',p:3600,k:2,e:2,l:95,v:'v'},
+  {id:'t10',c:'Aktivnosti',i:'🚙',n:'Terenska vozila',p:8400,k:80,e:0,l:30}]},
+ zlatibor:{n:'Zlatibor',from:'iz Beograda · 2 noći · 2 osobe',opts:[
+  {id:'z1',c:'Prevoz',i:'🚆',n:'Voz do Užica + lokalni prevoz',p:3600,k:10,e:2,l:60,v:'v'},
+  {id:'z2',c:'Prevoz',i:'🚌',n:'Autobus direktno',p:3800,k:20,e:1,l:25,v:'s'},
+  {id:'z3',c:'Prevoz',i:'🚗',n:'Sopstveni automobil',p:7500,k:85,e:0,l:5},
+  {id:'z4',c:'Smeštaj',i:'🏡',n:'Seosko domaćinstvo (eko)',p:9600,k:7,e:2,l:90,v:'v'},
+  {id:'z5',c:'Smeštaj',i:'🏨',n:'Hotel sa Green Key oznakom',p:15500,k:24,e:2,l:50,v:'c'},
+  {id:'z6',c:'Smeštaj',i:'🏝️',n:'Veliki spa-resort',p:24000,k:100,e:0,l:20},
+  {id:'z7',c:'Aktivnosti',i:'🧺',n:'Radionica lokalnih zanata',p:2200,k:0,e:2,l:95,v:'v'},
+  {id:'z8',c:'Aktivnosti',i:'🚴',n:'Električni bicikli kroz prirodu',p:3000,k:1,e:2,l:70,v:'v'},
+  {id:'z9',c:'Aktivnosti',i:'🏍️',n:'Quad tura',p:6000,k:40,e:0,l:25}]}
+};
+var PRE={tara:[['Najbolja vrednost',['t2','t4','t7']],['Pametan izbor',['t1','t4','t7','t9']],['Regenerativni izbor',['t1','t4','t7','t8','t9']]],
+ zlatibor:[['Najbolja vrednost',['z2','z4','z7']],['Pametan izbor',['z1','z4','z7']],['Regenerativni izbor',['z1','z4','z7','z8']]]};
+var BEH=['Javni prevoz na destinaciji','Digitalne karte i dokumenta','Bez plastike za jednokratnu upotrebu','Obroci kod lokalnih domaćina'];
+var HINT={'Prevoz':'izaberi voz, električni shuttle ili autobus.','Smeštaj':'izaberi smeštaj sa dokazanom održivošću.','Lokalni doprinos':'dodaj lokalnog vodiča ili obrok kod domaćina.','Ponašanje':'označi obaveze ponašanja ispod.'};
+var CH=[{id:'ch1',t:'Vikend bez automobila',d:'Završi putovanje bez automobila',b:100,f:function(t){return t.nocar}},
+ {id:'ch2',t:'Lokalni doprinos',d:'Ostavi najmanje 8.000 RSD lokalnim pružaocima na jednom putovanju',b:80,f:function(t){return t.loc>=8000}}];
+var BDG=[['🌱','Prvi pečat',function(d){return d.length>0}],['🚆','Bez automobila',function(d){return d.some(function(t){return t.nocar})}],
+ ['🤝','Lokalni heroj',function(d){return d.reduce(function(a,t){return a+t.loc},0)>=15000}],['⭐','Zero Impact 80+',function(d){return d.some(function(t){return t.score>=80})}],
+ ['🗺️','Dva odredišta',function(d){var m={};d.forEach(function(t){m[t.d]=1});return Object.keys(m).length>1}],['🏆','Ambasador',function(){return level()>=3}]];
+var REWARDS=[{t:'Popust 1.500 RSD na naredno putovanje',c:150,ic:'🏷️'},{t:'Ulaznica za muzej ili kulturni događaj',c:80,ic:'🎭'},{t:'Obrok kod lokalnog proizvođača',c:120,ic:'🍲'},{t:'Unapređenje smeštaja',c:250,ic:'⬆️'},{t:'Donacija lokalnoj inicijativi',c:50,ic:'🌱'}];
+var PARTNERS=[{n:'Srbija Voz',l:'Sertifikovano',s:90},{n:'Tara Eco Stay',l:'Sertifikovano',s:84},{n:'Domaćinstvo Mitrović',l:'Verifikovano',s:71},{n:'Zadruga Pirot',l:'Verifikovano',s:58},{n:'Lokalni vodiči Tara',l:'Samodeklarisano',s:34}];
+var CRIT_REQ=['Registrovana delatnost i potrebne licence (Zakon o turizmu, Zakon o ugostiteljstvu)','Dokaz za svaku „zelenu“ tvrdnju: sertifikat ili merljivi podaci','Transparentan status ponuđača i cena (Zakon o zaštiti potrošača)','Poštovanje propisa o zaštiti prirode i bezbednosti aktivnosti','Potpisan Kodeks održivog partnera, bez neovlašćenog korišćenja oznaka i logotipa'];
+var CRIT_SC=[['Priznat sertifikat: Green Key, GSTC-priznat standard, ISO 14001 ili Travelife',30,1],['Štednja energije i vode, obnovljivi izvori',20],['Upravljanje otpadom i bez jednokratne plastike',15],['Lokalna nabavka i zapošljavanje (najmanje 60%)',20],['Prevoz niske emisije ili aktivnosti u zaštićenom području uz dozvolu',15]];
+var STEPS=[['Online prijava','Popuni podatke o firmi i usluzi i izaberi paket.'],['Dokumentacija','Dostavi dozvole, sertifikate i dokaze za svaku zelenu tvrdnju.'],['Provera','Naš tim proverava dokaze i određuje oznaku: Sertifikovano, Verifikovano ili Samodeklarisano.'],['Ugovor i Kodeks','Potpisuješ ugovor, uključujući obračun provizije, i Kodeks održivog partnera.'],['Objava ponude','Ponuda ide na platformu uz izvor dokaza, a oznaka se preispituje jednom godišnje.']];
+var PKG=[{n:'Bronze',p:1000,f:'Mali iznajmljivači i početnici',i:['1 korisnički nalog','Upravljanje rezervacijama i kalendar dostupnosti','Osnovni dashboard, evidencija gostiju','Email podrška','Do 30 rezervacija mesečno']},
+ {n:'Silver',p:2000,f:'Mali hoteli i turističke agencije',i:['Sve iz Bronze paketa','Do 3 korisnička naloga','Napredni izveštaji, više smeštajnih jedinica','Automatske email potvrde, prioritetna podrška','Do 50 rezervacija mesečno']},
+ {n:'Gold',p:3500,f:'Rastuće turističke kompanije',i:['Sve iz Silver paketa','Do 10 korisnika, više lokacija','KPI dashboard i napredna analitika','SMS obaveštenja i CRM','Do 100 rezervacija mesečno']},
+ {n:'Platinum',p:6000,f:'Veliki turistički sistemi',i:['Sve iz Gold paketa','Neograničen broj korisnika i rezervacija','White-label i namenske integracije','Napredni BI izveštaji, SLA 24/7, account manager','Višejezična podrška']}];
+var REZ0=[{g:'Marko P.',s:'Seosko domaćinstvo · 2 noći',d:'12–14. okt',p:9600,pt:160,st:0},{g:'Ana J.',s:'Seosko domaćinstvo · 3 noći',d:'19–22. okt',p:14400,pt:240,st:0},{g:'Ivan i Mia',s:'Domaćinstvo + radionica zanata',d:'24–26. okt',p:11800,pt:200,st:1},{g:'Jelena S.',s:'Seosko domaćinstvo · 2 noći',d:'2–4. okt',p:9600,pt:160,st:2},{g:'Nikola T.',s:'Radionica zanata · 2 osobe',d:'3. okt',p:2200,pt:40,st:2}];
+var RST=['Nova','Potvrđena','Realizovana'];
+var TABS={putnik:[['pasos','🛂','Pasoš'],['istrazi','🧳','Planiraj'],['nagrade','🎁','Nagrade']],partner:[['ppregled','📊','Pregled'],['pkrit','✅','Uslovi'],['pclan','📝','Članstvo'],['prez','📅','Rezervacije']]};
+function level(){var i=0;LEVELS.forEach(function(l,k){if(state.pts>=l[0])i=k});return i}
+function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('show')},2800)}
+function calc(sel,comp,beh){
+ var o=DEST[state.dest].opts,ch=o.filter(function(x){return sel[x.id]}),r={ch:ch,sub:0,co2:0,saved:0,loc:0,score:null,pts:0};
+ ch.forEach(function(x){r.sub+=x.p;r.co2+=x.k;r.loc+=x.p*x.l/100});
+ r.loc=Math.round(r.loc);
+ ['Prevoz','Smeštaj'].forEach(function(c){var i=ch.filter(function(x){return x.c===c})[0];
+  if(i){var m=Math.max.apply(null,o.filter(function(x){return x.c===c}).map(function(x){return x.k}));r.saved+=Math.max(0,m-i.k)}});
+ var T=ch.filter(function(x){return x.c==='Prevoz'})[0],S=ch.filter(function(x){return x.c==='Smeštaj'})[0];
+ r.off=Math.round(r.co2*5);r.total=r.sub+(comp&&r.co2>0?r.off:0);r.nocar=!!T&&T.e>0;
+ if(T&&S){
+  var t=T.e==2?92:T.e==1?58:20,s=S.e==2?90:S.e==1?55:25,l=Math.round(r.loc/r.sub*100),b=beh.length*25;
+  if(comp&&r.co2>0)t=Math.min(100,t+15);
+  r.dim=[['Prevoz',t],['Smeštaj',s],['Lokalni doprinos',l],['Ponašanje',b]];
+  r.score=Math.round((t+s+l+b)/4);r.rate=5+Math.round(.15*r.score);r.pts=Math.round(r.sub*r.rate/100/10);
+ }
+ return r}
+function loadData(demo){
+ state.pts=demo?240:0;state.co2=demo?61:0;state.stamps=demo?['tara']:[];state.claimed=demo?{ch1:1,ch2:1}:{};
+ state.trips=demo?[{n:'Tara · 2 noći',d:'tara',total:18200,score:72,sum:240,loc:12600,saved:61,items:['Električni shuttle','Etno-kuća','Pešačka tura'],nocar:true,st:1}]:[];
+ state.sel={};state.comp=false;state.beh=[];state.dest='tara';state.rez=demo?JSON.parse(JSON.stringify(REZ0)):[];state.app=null;state.rf='-1';
+}
+function renderPassport(){
+ var i=level(),c=LEVELS[i],nx=LEVELS[i+1],done=state.trips.filter(function(t){return t.st});
+ $('#lvl').textContent='Nivo: '+c[1];$('#pts').textContent=state.pts;$('#pts2').textContent=state.pts;
+ if(nx){$('#prog').style.width=((state.pts-c[0])/(nx[0]-c[0])*100)+'%';$('#next').textContent='Još '+(nx[0]-state.pts)+' poena do nivoa „'+nx[1]+'“'}
+ else{$('#prog').style.width='100%';$('#next').textContent='Dostigao si najviši nivo.'}
+ $('#co2').textContent=state.co2;$('#loc').textContent=nf(done.reduce(function(a,t){return a+t.loc},0));$('#trips').textContent=state.stamps.length;
+ var st=state.stamps.slice(-8),h='';
+ for(var k=0;k<8;k++){var id=st[k];h+=id===undefined?'<div class="stamp" aria-label="Prazan pečat">+</div>':'<div class="stamp on"><div><em>'+STAMPNAMES[id][0]+'</em>'+STAMPNAMES[id][1]+'</div></div>'}
+ $('#stamps').innerHTML=h;
+ $('#badges').innerHTML=BDG.map(function(b){return '<div class="bdg'+(b[2](done)?' on':'')+'"><em>'+b[0]+'</em>'+b[1]+'</div>'}).join('');
+ $('#chal').innerHTML=CH.map(function(c){var ok=state.claimed[c.id];return '<div class="card"><div class="row"><h3>'+c.t+'</h3><span class="pill">+'+c.b+'</span></div><p>'+c.d+'</p><span class="eco">'+(ok?'Završeno':'U toku')+'</span></div>'}).join('');
+ $('#mytrips').innerHTML=state.trips.length?state.trips.map(function(t,i){
+  var it=esc(t.items.join(', '));
+  return t.st?'<div class="card"><div class="row"><div><span class="tag">Zapis u pasošu</span><h3>'+t.n+'</h3></div><span class="pill">'+t.score+'/100</span></div><p>'+it+'</p><span class="eco">'+nf(t.loc)+' RSD ostalo lokalno · +'+t.sum+' poena</span></div>'
+  :'<div class="card"><div class="row"><div><span class="tag">Predstojeće · '+fmt(t.total)+'</span><h3>'+t.n+'</h3></div><span class="pill">'+t.score+'/100</span></div><p>'+it+'</p><button class="btn" data-done="'+i+'">Završi putovanje (demo)</button></div>'}).join('')
+  :'<p class="tag">Još nema putovanja. Isplaniraj prvo u kartici Planiraj.</p>';
+}
+function renderDests(){$('#dests').innerHTML=Object.keys(DEST).map(function(k){return '<button class="chip" aria-pressed="'+(state.dest===k)+'" data-d="'+k+'">'+DEST[k].n+'</button>'}).join('')}
+function renderBook(){
+ var d=DEST[state.dest],r=calc(state.sel,state.comp,state.beh),h='<p class="tag">'+d.n+' · '+d.from+'</p><h2>Tri predloga za tebe</h2>';
+ PRE[state.dest].forEach(function(p,i){var s={};p[1].forEach(function(id){s[id]=1});var q=calc(s,false,BEH.map(function(x,j){return j}));
+  h+='<div class="pre"><div class="row"><h3>'+p[0]+'</h3><span class="pill">Score do '+q.score+'</span></div><p class="tag">'+fmt(q.sub)+' · '+q.co2+' kg CO₂ · '+Math.round(q.loc/q.sub*100)+'% lokalno · do +'+q.pts+' poena</p><button class="btn ghost" data-pre="'+i+'">Primeni</button></div>'});
+ ['Prevoz','Smeštaj','Aktivnosti'].forEach(function(c){
+  var os=d.opts.filter(function(o){return o.c===c}).sort(function(a,b){return b.e-a.e});
+  h+='<h2>'+c+'</h2><p class="tag" style="margin:-6px 0 10px">'+(c==='Aktivnosti'?'Izaberi više njih po želji':'Izaberi jednu opciju')+'</p>';
+  os.forEach(function(o){var l=LV[o.e];
+   h+='<button class="opt" data-op="'+o.id+'" aria-pressed="'+!!state.sel[o.id]+'"><div class="top"><span>'+o.i+' '+o.n+'</span><span>'+fmt(o.p)+'</span></div><div class="meta"><span class="lv '+l[1]+'">'+l[0]+'</span><span>'+o.k+' kg CO₂</span><span>'+o.l+'% lokalno</span>'+(o.v?'<span>'+VL[o.v]+'</span>':'')+'</div></button>'});
+  var bad=r.ch.filter(function(o){return o.c===c&&o.e<2}).sort(function(a,b){return b.k-a.k})[0];
+  if(bad){var a=os.filter(function(o){return o.e===2&&!state.sel[o.id]}).sort(function(x,y){return x.k-y.k})[0];
+   if(a){var s2=JSON.parse(JSON.stringify(state.sel));delete s2[bad.id];s2[a.id]=1;
+    var q=calc(s2,state.comp,state.beh),dp=q.sub-r.sub,dk=bad.k-a.k,ds=(q.score!==null&&r.score!==null)?q.score-r.score:0,dt=q.pts-r.pts,pp=[];
+    if(dk>0)pp.push('Za '+dk+' kg manje CO₂');if(ds>0)pp.push('Score +'+ds);if(dt>0)pp.push('+'+dt+' poena');
+    pp.push(dp>0?'+'+fmt(dp):dp<0?fmt(-dp)+' jeftinije':'ista cena');
+    h+='<div class="nudge"><b>Bolji izbor: '+a.n+'</b><p>'+pp.join(' · ')+'</p><button class="btn" data-swap="'+bad.id+'|'+a.id+'">Zameni</button></div>'}}
+ });
+ h+='<h2>Pregled i Zero Impact Score</h2><div class="card">';
+ if(!r.ch.length)h+='<p>Izaberi prevoz i smeštaj da vidiš cenu i uticaj.</p>';
+ else{
+  r.ch.forEach(function(o){h+='<div class="ln"><span>'+o.n+'</span><span>'+fmt(o.p)+'</span></div>'});
+  if(state.comp&&r.co2>0)h+='<div class="ln"><span>Kompenzacija CO₂ ('+r.co2+' kg)</span><span>'+fmt(r.off)+'</span></div>';
+  h+='<div class="ln t"><span>Ukupno</span><span>'+fmt(r.total)+'</span></div>';
+  if(r.score!==null){
+   var low=r.dim.slice().sort(function(a,b){return a[1]-b[1]})[0];
+   h+='<div class="score" style="margin-top:14px"><div class="ring" style="--p:'+r.score+'" role="img" aria-label="Zero Impact Score '+r.score+' od 100"><b>'+r.score+'</b></div><div style="flex:1">'+r.dim.map(function(x){return '<div class="dim"><span>'+x[0]+'</span><div class="meter"><i style="width:'+x[1]+'%"></i></div><span>'+x[1]+'</span></div>'}).join('')+'</div></div>'
+   +'<p class="tag" style="margin-top:10px">Najlakše poboljšanje: '+HINT[low[0]]+'</p>'
+   +'<div class="ln"><span>Nagrada ('+r.rate+'% vrednosti rezervacije)</span><b class="lv2">+'+r.pts+' poena</b></div>'}
+  else h+='<p class="warn" style="color:var(--mut)">Izaberi i prevoz i smeštaj da izračunamo Zero Impact Score.</p>';
+  h+='<div class="lab" style="margin-top:12px">Obavezujem se na</div>'+BEH.map(function(t,i){return '<label class="chk"><input type="checkbox" data-beh="'+i+'"'+(state.beh.indexOf(i)>-1?' checked':'')+'> '+t+'</label>'}).join('');
+  if(r.co2>0)h+='<label class="chk"><input type="checkbox" id="comp"'+(state.comp?' checked':'')+'> Kompenzuj CO₂ za '+fmt(r.off)+' (podiže ocenu prevoza)</label>';
+ }
+ h+='<p class="tag" style="margin-top:12px">GreenTravel je marketplace: ugovor o usluzi zaključuješ sa partnerom. Rangiranje prati Zero Impact Score, cenu i lokaciju, a plaćeno isticanje je posebno označeno.</p><button class="btn" data-book="1"'+(r.score!==null?'':' disabled')+'>Rezerviši putovanje</button></div>';
+ $('#book').innerHTML=h;
+}
+function finish(i){var t=state.trips[i];if(t.st)return;var before=level(),ex=[];
+ CH.forEach(function(c){if(!state.claimed[c.id]&&c.f(t)){state.claimed[c.id]=1;t.sum+=c.b;ex.push(c.t)}});
+ t.st=1;state.pts+=t.sum;state.co2+=t.saved;state.stamps.push(t.d);if(t.score>=80)state.stamps.push('zit');
+ all();toast(level()>before?'Novi nivo: '+LEVELS[level()][1]+'!':'+'+t.sum+' poena'+(ex.length?' · izazov: '+ex[0]:''))}
+function renderRewards(){
+ $('#rewards').innerHTML=REWARDS.map(function(r,i){var ok=state.pts>=r.c;
+  return '<div class="card"><div class="row"><h3>'+r.ic+' '+r.t+'</h3><span class="pill">'+r.c+'</span></div><button class="btn" data-r="'+i+'"'+(ok?'':' disabled')+'>'+(ok?'Iskoristi poene':'Fali još '+(r.c-state.pts)+' poena')+'</button></div>'}).join('');
+}
+function renderPartners(){
+ $('#partners').innerHTML=PARTNERS.map(function(p){var cls=p.l==='Sertifikovano'?'b-gold':p.l==='Verifikovano'?'b-silver':'b-new';
+  return '<div class="card"><div class="row"><h3>'+p.n+'</h3><span class="badge '+cls+'">'+p.l+'</span></div><div class="meter" role="img" aria-label="Eko-skor '+p.s+' od 100"><i style="width:'+p.s+'%"></i></div><span class="tag">Eko-skor '+p.s+'/100</span></div>'}).join('');
+}
+function renderProfile(){var u=state.user||{};
+ $('#pprof').innerHTML=(u.demo||!u.name)?'<div class="card"><span class="tag">Prijavljen kao</span><div class="row"><h3>Domaćinstvo Mitrović</h3><span class="badge b-silver">Verifikovano</span></div><div class="meter" role="img" aria-label="Eko-skor 71 od 100"><i style="width:71%"></i></div><span class="tag">Eko-skor 71/100 · za oznaku Sertifikovano potreban je priznat sertifikat (npr. Green Key) i 70+ bodova</span></div>'
+ :'<div class="card"><span class="tag">Prijavljen kao</span><div class="row"><h3>'+esc(u.name)+'</h3><span class="badge b-new">Nov</span></div><p>Oznaka još nije dodeljena. Proveri uslove i završi prijavu u tabu Članstvo.</p></div>'}
+function renderCritLists(){
+ $('#req').innerHTML=CRIT_REQ.map(function(t){return '<label class="chk card"><input type="checkbox" data-rq="1"> '+t+'</label>'}).join('');
+ $('#scr').innerHTML=CRIT_SC.map(function(c){return '<label class="chk card"><input type="checkbox" data-sc="'+c[1]+'"'+(c[2]?' data-cert="1"':'')+'> <span>'+c[0]+' <b class="lv2">+'+c[1]+'</b></span></label>'}).join('');
+ updCrit();
+}
+function updCrit(){
+ var rq=0,sc=0,t,d,cert=false;
+ document.querySelectorAll('[data-rq]').forEach(function(x){if(x.checked)rq++});
+ document.querySelectorAll('[data-sc]').forEach(function(x){if(x.checked){sc+=+x.dataset.sc;if(x.dataset.cert)cert=true}});
+ if(rq<CRIT_REQ.length){t='Obavezni uslovi: '+rq+'/'+CRIT_REQ.length;d='Bez svih obaveznih uslova ponuda ne može da se objavi na platformi.'}
+ else if(sc>=70&&cert){t='Sertifikovano';d='Oznaka uz izvor dokaza (npr. Green Key 2025), puni poeni za goste i istaknuto mesto.'}
+ else if(sc>=50){t='Verifikovano';d='Dokumentaciju je proverio naš tim. Oznaka Verifikovano i puni poeni za goste.'}
+ else{t='Samodeklarisano';d='Ponuda je vidljiva uz jasnu oznaku Samodeklarisano, bez poena za goste.'}
+ $('#critres').innerHTML='<span class="tag">Tvoj rezultat</span><h3>'+t+'</h3><div class="meter" role="img" aria-label="'+sc+' od 100 bodova"><i style="width:'+sc+'%"></i></div><span class="tag">'+sc+'/100 bodova · Verifikovano od 50, Sertifikovano od 70 uz priznat sertifikat</span><p style="margin-top:8px">'+d+'</p>';
+}
+function renderSteps(){$('#steps').innerHTML=STEPS.map(function(s,i){return '<div class="stp"><i>'+(i+1)+'</i><div><b>'+s[0]+'</b><p class="tag">'+s[1]+'</p></div></div>'}).join('')}
+function renderPk(){
+ $('#pk').innerHTML=PKG.map(function(p){var on=state.pkg===p.n;
+  return '<div class="card'+(on?' sel':'')+'"><div class="row"><h3>'+p.n+'</h3><span class="pill">'+nf(p.p)+' RSD/mes.</span></div><span class="tag">'+p.f+'</span><ul class="pl" style="margin-top:8px">'+p.i.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul><button class="btn ghost" data-pkg="'+p.n+'" aria-pressed="'+on+'">'+(on?'Izabrano':'Izaberi paket')+'</button></div>'}).join('');
+}
+function renderApply(){
+ var a=state.app,pn=state.user&&!state.user.demo?state.user.name:'',pe=state.user&&!state.user.demo?state.user.email:'';
+ $('#apply').innerHTML=a?'<div class="card"><span class="tag">Prijava primljena · '+a.id+'</span><h3>'+esc(a.n)+'</h3><p>Paket: '+state.pkg+'. Status: u obradi. Javićemo se na '+esc(a.e)+' u roku od 7 radnih dana sa listom potrebne dokumentacije.</p></div>'
+ :'<div class="card"><h3>Prijava za članstvo</h3><p class="tag">Izabrani paket: '+state.pkg+'</p>'
+ +'<label class="lab">Naziv firme ili domaćinstva<input class="in" id="f-n" autocomplete="organization" value="'+esc(pn)+'"></label>'
+ +'<label class="lab">Vrsta usluge<select class="in" id="f-t"><option>Prevoz</option><option>Smeštaj</option><option>Aktivnosti i iskustva</option><option>Turistička agencija</option></select></label>'
+ +'<label class="lab">E-pošta<input class="in" id="f-e" type="email" autocomplete="email" value="'+esc(pe)+'"></label>'
+ +'<button class="btn" data-sub="1">Pošalji prijavu</button></div>';
+}
+function renderRez(){
+ var cnt=[0,0,0],h='';state.rez.forEach(function(r){cnt[r.st]++});
+ $('#rf').innerHTML=[['-1','Sve ('+state.rez.length+')'],['0','Nove ('+cnt[0]+')'],['1','Potvrđene ('+cnt[1]+')'],['2','Realizovane ('+cnt[2]+')']].map(function(f){return '<button class="chip" aria-pressed="'+(state.rf===f[0])+'" data-rf="'+f[0]+'">'+f[1]+'</button>'}).join('');
+ state.rez.forEach(function(r,i){
+  if(state.rf!=='-1'&&+state.rf!==r.st)return;
+  h+='<div class="card"><div class="row"><div><span class="tag">'+r.d+'</span><h3>'+r.g+'</h3></div><span class="badge '+(r.st==2?'b-gold':'b-new')+'">'+RST[r.st]+'</span></div><p>'+r.s+' · '+fmt(r.p)+'</p>'
+  +(r.st===0?'<button class="btn" data-ra="'+i+'">Potvrdi rezervaciju</button>':r.st===1?'<button class="btn" data-ra="'+i+'">Potvrdi realizaciju (QR gosta)</button><p class="tag" style="margin-top:8px">Poeni se dodeljuju gostu tek posle potvrde realizacije.</p>':'<p class="eco">Gost je dobio +'+r.pt+' poena</p>')+'</div>'});
+ $('#rlist').innerHTML=h||'<p class="tag">Nema rezervacija u ovom statusu.</p>';
+}
+function all(){renderPassport();renderBook();renderRewards()}
+function setMode(m){
+ state.mode=m;document.querySelectorAll('#modeseg button').forEach(function(x){x.setAttribute('aria-pressed',x.dataset.m===m)});
+ $('#tabs').style.gridTemplateColumns='repeat('+TABS[m].length+',1fr)';
+ $('#tabs').innerHTML=TABS[m].map(function(t,i){return '<button role="tab" aria-selected="'+(i===0)+'" data-t="'+t[0]+'"><span>'+t[1]+'</span>'+t[2]+'</button>'}).join('');
+ document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on')});$('#v-'+TABS[m][0][0]).classList.add('on');
+ $('header small').textContent=m==='partner'?'Partnerski portal':'Putuj bolje. Vidi uticaj. Osvoji nagradu.';window.scrollTo(0,0);
+}
+function renderAuth(){
+ var up=state.am==='up';
+ document.querySelectorAll('[data-am]').forEach(function(x){x.setAttribute('aria-pressed',x.dataset.am===state.am)});
+ $('#authform').innerHTML=(up?'<label class="lab">Ime i prezime<input class="in" id="a-n" autocomplete="name"></label>':'')
+ +'<label class="lab">E-pošta<input class="in" id="a-e" type="email" autocomplete="email"></label>'
+ +'<label class="lab">Lozinka<span class="pw"><input class="in" id="a-p" type="password" autocomplete="'+(up?'new-password':'current-password')+'"><button type="button" data-show="1">Prikaži</button></span></label>'
+ +'<div class="lab">Nalog za</div><div class="rolechips" role="group" aria-label="Vrsta naloga"><button class="chip" data-role="putnik" aria-pressed="'+(state.role==='putnik')+'">Putnik</button><button class="chip" data-role="partner" aria-pressed="'+(state.role==='partner')+'">Partner</button></div>'
+ +(up?'<label class="chk"><input type="checkbox" id="a-t"> Slažem se sa uslovima korišćenja i politikom privatnosti</label>':'')
+ +'<p class="err" id="aerr" role="alert"></p><button class="btn" data-auth="1">'+(up?'Napravi nalog':'Prijavi se')+'</button>'
+ +(up?'':'<button class="btn ghost" data-forgot="1">Zaboravljena lozinka</button>');
+}
+function login(name,email,role,demo){
+ state.user={name:name,email:email,role:role,demo:demo};loadData(demo);
+ $('.pname').textContent=demo?'Marko Petrović':name;$('.pid').textContent='DIGITALNI PASOŠ · GT-2026-'+(demo?'0417':String(1000+Math.floor(Math.random()*9000)));
+ document.body.classList.remove('out');$('#modeseg').hidden=!demo;
+ renderDests();all();renderRez();renderApply();renderProfile();renderPk();setMode(role);toast('Uspešna prijava');
+}
+function authSubmit(){
+ var up=state.am==='up',em=$('#a-e').value.trim(),pw=$('#a-p').value,nm=up?$('#a-n').value.trim():'',er='';
+ if(up&&nm.length<2)er='Unesi ime i prezime.';
+ else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))er='Unesi ispravnu e-poštu.';
+ else if(pw.length<8)er='Lozinka mora imati najmanje 8 znakova.';
+ else if(up&&!$('#a-t').checked)er='Potvrdi uslove korišćenja da nastaviš.';
+ if(er){$('#aerr').textContent=er;return}
+ var loc=em.split('@')[0];login(up?nm:loc.charAt(0).toUpperCase()+loc.slice(1),em,state.role,false);
+}
+document.addEventListener('click',function(e){
+ var b=e.target.closest('button');if(!b)return;var D=b.dataset;
+ if(D.t){document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on')});$('#v-'+D.t).classList.add('on');document.querySelectorAll('#tabs button').forEach(function(x){x.setAttribute('aria-selected',x===b)});window.scrollTo(0,0)}
+ else if(D.d){state.dest=D.d;state.sel={};state.comp=false;renderDests();renderBook()}
+ else if(D.op){var o=DEST[state.dest].opts.filter(function(x){return x.id===D.op})[0];
+  if(state.sel[o.id])delete state.sel[o.id];
+  else{if(o.c!=='Aktivnosti')DEST[state.dest].opts.forEach(function(x){if(x.c===o.c)delete state.sel[x.id]});state.sel[o.id]=1}
+  renderBook()}
+ else if(D.pre){state.sel={};PRE[state.dest][D.pre][1].forEach(function(id){state.sel[id]=1});renderBook();toast('Predlog primenjen. Prilagodi ga po želji.')}
+ else if(D.swap){var p=D.swap.split('|');delete state.sel[p[0]];state.sel[p[1]]=1;renderBook();toast('Zamenjeno: manji uticaj i više poena')}
+ else if(D.book){var r=calc(state.sel,state.comp,state.beh);if(r.score===null)return;
+  state.trips.unshift({n:DEST[state.dest].n+' · '+DEST[state.dest].from.split('·')[1].trim(),d:state.dest,total:r.total,score:r.score,sum:r.pts,loc:r.loc,saved:r.saved,items:r.ch.map(function(x){return x.n}),nocar:r.nocar,st:0});
+  state.sel={};state.comp=false;state.beh=[];all();toast('Rezervisano! Poeni i zapis u pasošu stižu kad završiš putovanje.')}
+ else if(D.done){finish(+D.done)}
+ else if(D.r){var rw=REWARDS[D.r];if(state.pts>=rw.c){state.pts-=rw.c;renderPassport();renderRewards();toast('Nagrada aktivirana: '+rw.t)}}
+ else if(D.pkg){state.pkg=D.pkg;renderPk();renderApply()}
+ else if(D.am){state.am=D.am;renderAuth()}
+ else if(D.role){state.role=D.role;document.querySelectorAll('[data-role]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}
+ else if(D.show){var pi=$('#a-p');pi.type=pi.type==='password'?'text':'password';b.textContent=pi.type==='password'?'Prikaži':'Sakrij'}
+ else if(D.auth){authSubmit()}
+ else if(D.forgot){var fe=$('#a-e').value.trim();if(fe.indexOf('@')<1){$('#aerr').textContent='Unesi e-poštu na koju šaljemo link.';return}toast('Link za reset lozinke je poslat (demo)')}
+ else if(D.social){login('Korisnik '+D.social,'korisnik@'+D.social.toLowerCase()+'.com',state.role,false)}
+ else if(D.demo){login(D.demo==='putnik'?'Marko Petrović':'Domaćinstvo Mitrović','demo@greentravel.rs',D.demo,true)}
+ else if(D.m){setMode(D.m)}
+ else if(D.rf){state.rf=D.rf;renderRez()}
+ else if(D.ra){var rr=state.rez[D.ra];rr.st++;renderRez();toast(rr.st===2?'Gost je dobio +'+rr.pt+' poena u pasošu':'Rezervacija potvrđena')}
+ else if(D.sub){var n=$('#f-n').value.trim(),em=$('#f-e').value.trim();
+  if(!n||em.indexOf('@')<1){toast('Unesi naziv i ispravnu e-poštu');return}
+  state.app={n:n,e:em,id:'GT-P-'+(100+Math.floor(Math.random()*900))};renderApply();toast('Prijava poslata')}
+});
+document.addEventListener('change',function(e){var t=e.target;
+ if(t.dataset.rq||t.dataset.sc){updCrit();return}
+ if(t.dataset.beh!==undefined){var i=+t.dataset.beh,k=state.beh.indexOf(i);if(t.checked&&k<0)state.beh.push(i);if(!t.checked&&k>-1)state.beh.splice(k,1);renderBook();return}
+ if(t.id==='comp'){state.comp=t.checked;renderBook()}});
+$('#openQr').onclick=function(){
+ var u=location.href,box=$('#qr');box.innerHTML='';$('#url').textContent=u;
+ try{new QRCode(box,{text:u,width:200,height:200,correctLevel:QRCode.CorrectLevel.M});var cv=box.querySelector('canvas');if(cv)$('#dl').href=cv.toDataURL('image/png')}catch(err){box.textContent='QR nije dostupan'}
+ $('#qrDlg').showModal();
+};
+$('#closeQr').onclick=function(){$('#qrDlg').close()};
+$('#copy').onclick=function(){try{navigator.clipboard.writeText(location.href).then(function(){toast('Link kopiran')},function(){toast('Kopiranje nije uspelo')})}catch(err){toast('Kopiranje nije uspelo')}};
+$('#logout').onclick=function(){state.user=null;document.body.classList.add('out');state.am='in';renderAuth();window.scrollTo(0,0)};
+$('#auth').addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'&&e.target.type!=='checkbox'){e.preventDefault();authSubmit()}});
+loadData(true);renderAuth();renderDests();all();renderPartners();renderCritLists();renderSteps();renderPk();renderApply();renderRez();renderProfile();setMode('putnik');
+</script>
+</body>
+</html>
